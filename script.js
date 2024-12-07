@@ -7,62 +7,36 @@ const products = [
     { id: 5, name: "Jacket", category: "clothes", price: 49.99, image: "./img/jacket.png" },
     { id: 6, name: "Watch", category: "accessories", price: 89.99, image: "./img/watch.png" }
 ];
-
-// Track the number of items in the cart
-let cartCount = 0;
-
-// Add to cart functionality
-
-let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-
-window.onload = () => {
+let count = document.querySelector("#cart-count");
+if(localStorage.getItem("count")){
+    count.innerHTML = `${(localStorage.getItem("count"))}`;
+}else{
+    localStorage.setItem("count","0")
+    count.innerHTML=`0`;
+}
+ function ClickOnCart(){
+    let c = Number.parseInt(localStorage.getItem("count"))
+    c++;
+    localStorage.setItem("count",`${c}`)
+    console.log(  localStorage.getItem("count"));
     
-    document.getElementById("cart-count").textContent = cartCount;
-    displayProducts(products);
-};
-
-function displayProducts(products) {
-    const productList = document.getElementById("product-list");
-    productList.innerHTML = "";
-    products.forEach(product => {
-        const productDiv = document.createElement("div");
-        productDiv.classList.add("product");
-        productDiv.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <h3>${product.name}</h3>
-            <p>Price: $${product.price.toFixed(2)}</p>
-            <button onclick="addToCart(${product.id})">Add to Cart</button>
-        `;
-        productList.appendChild(productDiv);
-    });
+    count.innerHTML =  `${c}`
 }
 
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    cartItems.push(product);
-    cartCount+=1;
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-    document.getElementById("cart-count").textContent = cartCount;
+function displayAllProduct() {
+    products.map((product) => {
+        document.querySelector("#product-list").insertAdjacentHTML("beforeend", `
+            
+            <div class="card" style="width: 18rem;">
+  <img src="${product.image}" height="200px" width="200px" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">${product.name}</h5>
+    <h5 class="card-text">${product.category}</h5>
+    <p class="card-text">${product.price}</p>
+    <button class="btn btn-primary" onclick="ClickOnCart()">Add to Cart</button>
+  </div>
+</div>
+            `)
+    })
 }
-
-// Function to filter products by category
-function filterProducts() {
-    const category = document.getElementById("category").value;
-    const filteredProducts = products.filter(product => category === "all" || product.category === category);
-    sortProducts(filteredProducts);
-}
-
-// Function to sort products by price
-function sortProducts(productsToSort = products) {
-    const sortOption = document.getElementById("sort").value;
-    let sortedProducts = [...productsToSort];
-
-    if (sortOption === "price-low-high") {
-        sortedProducts.sort((a, b) => a.price - b.price);
-    } else if (sortOption === "price-high-low") {
-        sortedProducts.sort((a, b) => b.price - a.price);
-    }
-
-    displayProducts(sortedProducts);
-}
-
+displayAllProduct()
