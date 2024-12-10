@@ -7,36 +7,47 @@ const products = [
     { id: 5, name: "Jacket", category: "clothes", price: 49.99, image: "./img/jacket.png" },
     { id: 6, name: "Watch", category: "accessories", price: 89.99, image: "./img/watch.png" }
 ];
-let count = document.querySelector("#cart-count");
-if(localStorage.getItem("count")){
-    count.innerHTML = `${(localStorage.getItem("count"))}`;
-}else{
-    localStorage.setItem("count","0")
-    count.innerHTML=`0`;
-}
- function ClickOnCart(){
-    let c = Number.parseInt(localStorage.getItem("count"))
-    c++;
-    localStorage.setItem("count",`${c}`)
-    console.log(  localStorage.getItem("count"));
-    
-    count.innerHTML =  `${c}`
+
+const count = document.querySelector("#cart-count");
+
+// Initialize cart count from localStorage
+if (localStorage.getItem("count")) {
+    count.textContent = localStorage.getItem("count");
+} else {
+    localStorage.setItem("count", "0");
+    count.textContent = "0";
 }
 
+// Function to add products to the cart
+function ClickOnCart(productId) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const product = products.find((p) => p.id === productId);
+    if (product) {
+        cart.push(product);
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    const cartCount = cart.length;
+    localStorage.setItem("count", `${cartCount}`);
+    count.textContent = cartCount;
+    console.log("Cart updated:", cart);
+}
+
+// Display all products
 function displayAllProduct() {
     products.map((product) => {
         document.querySelector("#product-list").insertAdjacentHTML("beforeend", `
-            
             <div class="card" style="width: 18rem;">
-  <img src="${product.image}" height="200px" width="200px" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">${product.name}</h5>
-    <h5 class="card-text">${product.category}</h5>
-    <p class="card-text">${product.price}</p>
-    <button class="btn btn-primary" onclick="ClickOnCart()">Add to Cart</button>
-  </div>
-</div>
-            `)
-    })
+                <img src="${product.image}" height="200px" width="200px" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <h5 class="card-text">${product.category}</h5>
+                    <p class="card-text">$${product.price.toFixed(2)}</p>
+                    <button class="btn btn-primary" onclick="ClickOnCart(${product.id})">Add to Cart</button>
+                </div>
+            </div>
+        `);
+    });
 }
-displayAllProduct()
+
+displayAllProduct();

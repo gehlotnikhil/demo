@@ -3,33 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Cart</title>
+    <title>Cart</title>
     <link rel="stylesheet" href="style.css">
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"></script>
-
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <li><a href="index.html">Nikhil's Store</a></li>
+                <li><a href="index.html" id="name">Nikhil's Store</a></li>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="index.html">Shop</a></li>
-                <li><a href="#">Cart</a></li>
+                <li><a href="index.html#product-list">Shop</a></li>
+                <li>
+                    <a href="cart.html" id="cart">
+                        Cart (<span id="cart-count">0</span>)
+                    </a>
+                </li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <h1>Your Cart</h1>
+        <h1>Your Shopping Cart</h1>
         <section id="cart-items">
-            <!-- Cart items will be dynamically added here -->
+            <!-- Cart items will be dynamically inserted here -->
         </section>
+
         <div id="cart-summary">
-            <h2>Order Summary</h2>
+            <h2>Summary</h2>
             <p>Total Items: <span id="total-items">0</span></p>
             <p>Total Price: $<span id="total-price">0.00</span></p>
-            <button id="place-order" onclick="placeOrder()">Place Order</button>
+            <button onclick="clearCart()">Clear Cart</button>
+            <button onclick="buyNow()">Buy Now</button>
         </div>
     </main>
 
